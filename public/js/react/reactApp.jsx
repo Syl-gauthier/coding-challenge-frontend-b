@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import postReq from '../lib/ajaxUtils.js';
 
 //as this is a demo I decided not to dive into the geotag part and just take the two given for the challenge
 var geotags = {
@@ -20,14 +20,16 @@ class App extends React.Component {
     super();
   }
   
-  handleSubmission() {
-    console.log('submissionHandled');
+  handleSubmission(data) {
+    postReq('/query', data, function(response) {
+      console.log(response);
+    });
   }
   
   render() {
     return (
       <div>
-        <Form onSubmit={()=>this.handleSubmission()}/>
+        <Form onClick={(data)=>this.handleSubmission(data)}/>
         <Results />
       </div>
     );
@@ -38,8 +40,8 @@ class Form extends React.Component {
   constructor() {
     super();
     this.state={
-      start: '',
-      arrival:''
+      start: 'newyork',
+      arrival:'montreal'
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -53,17 +55,18 @@ class Form extends React.Component {
   
   render() {
     return (
-      <form action='/query' method='post' onSubmit={() => this.props.onSubmit()}>
-        <select onChange={this.handleChange} id='start' value={this.state.start}>
-          <option value='newyork'>New-york</option>
-          <option value='montreal'>Montréal</option>
-         </select>
-        <select onChange={this.handleChange} id='arrival' value={this.state.arrival}>
-          <option value='newyork'>New-york</option>
-          <option value='montreal'>Montréal</option>
-         </select>
-        <input type='submit' value='Submit' ></input>
-      </form>
+      <div>
+        <select onChange={this.handleChange} id='start' name='start' value={this.state.start}>
+        <option value='newyork'>New-york</option>
+        <option value='montreal'>Montréal</option>
+        </select>
+        <select onChange={this.handleChange} id='arrival' name='arrival' value={this.state.arrival}>
+        <option value='newyork'>New-york</option>
+        <option value='montreal'>Montréal</option>
+        </select>
+        <button onClick={()=>this.props.onClick(this.state)}>Submit</button>
+      </div>
+      
     );
   }
 }
