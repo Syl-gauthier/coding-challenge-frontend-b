@@ -8,9 +8,9 @@ var geotags = {
   montreal: 'f25dvk'
 }
 
-var contend = {
-  title: {en: 'OSHEAGA!!', fr:'OSHEAGA'},
-  submitButton: {en: 'Start my search', fr:'Commencer ma recherche'}
+var content = {
+  title: {eng: 'OSHEAGA!!', fr:'OSHEAGA'},
+  submitButton: {eng: 'Start my search', fr:'Commencer ma recherche'}
 }
 
 
@@ -18,18 +18,39 @@ var contend = {
 class App extends React.Component {
   constructor() {
     super();
+      var strings = Object.keys(content).reduce(function(object ,key) {
+      object[key] = content[key]['fr'];
+      return object;
+    }, {});
+    this.state = {
+      language: 'fr',
+      strings
+    };
   }
-  
+    
   handleSubmission(data) {
     postReq('/query', data, function(response) {
       console.log(response);
     });
   }
   
+  setLang(language) {
+    console.log(language);
+    var strings = Object.keys(content).reduce(function(object ,key) {
+      object[key] = content[key][language];
+      return object;
+    }, {});
+    this.setState({
+      language,
+      strings
+    });    
+  }
+  
   render() {
     return (
       <div>
-        <Form onClick={(data)=>this.handleSubmission(data)}/>
+        <LangSelect setLang={(language)=>this.setLang(language)}></LangSelect>
+        <Form onClick={(data)=>this.handleSubmission(data)} submitButton={this.state.strings.submitButton}/>
         <Results />
       </div>
     );
@@ -64,9 +85,21 @@ class Form extends React.Component {
         <option value='newyork'>New-york</option>
         <option value='montreal'>Montréal</option>
         </select>
-        <button onClick={()=>this.props.onClick(this.state)}>Submit</button>
+        <button onClick={()=>this.props.onClick(this.state)}>{this.props.submitButton}</button>
       </div>
       
+    );
+  }
+}
+
+class LangSelect extends React.Component {
+  
+  render() {
+    return(
+      <div className='lang-select'>
+        <button onClick ={()=>this.props.setLang('fr')}>Fr</button>
+        <button onClick ={()=>this.props.setLang('eng')}>Eng</button>
+      </div>
     );
   }
 }
