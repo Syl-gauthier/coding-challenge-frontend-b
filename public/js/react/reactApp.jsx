@@ -9,8 +9,15 @@ var geotags = {
 }
 
 var content = {
-  title: {eng: 'OSHEAGA!!', fr:'OSHEAGA'},
-  submitButton: {eng: 'Start my search', fr:'Commencer ma recherche'}
+  title: {eng: 'OSHEAGA!!', fr:'OSHEAGA!!'},
+  submitButton: {eng: 'Start my search', fr:'Commencer ma recherche'},
+  results:{
+    departureLoc: {eng: 'from', fr: 'de'},
+    departureTime: {eng: 'departur time', fr: 'heure de départ'},
+    arrivalLoc: {eng: 'at', fr: 'à'},
+    arrivalTime: {eng: 'arrival time', fr: 'heure d\'arrivée'},
+    price: {eng: 'price', fr: 'prix'}
+  }
 }
 
 
@@ -18,40 +25,60 @@ var content = {
 class App extends React.Component {
   constructor() {
     super();
-      var strings = Object.keys(content).reduce(function(object ,key) {
-      object[key] = content[key]['fr'];
-      return object;
-    }, {});
+    var strings = {};
+    for (var key in content) {
+      if (content[key]['fr']) strings[key] = content[key]['fr'];
+      else {
+        strings[key] = {};
+        for (var entry in content[key]) {
+          strings[key][entry] = content[key][entry]['fr'];
+        }
+      }
+    }
     this.state = {
       language: 'fr',
-      strings
+      strings,
+      results: null
     };
   }
     
   handleSubmission(data) {
     postReq('/query', data, function(response) {
       console.log(response);
-    });
+      this.setState({results: JSON.parse(response)});
+    }.bind(this));
   }
   
   setLang(language) {
     console.log(language);
-    var strings = Object.keys(content).reduce(function(object ,key) {
-      object[key] = content[key][language];
-      return object;
-    }, {});
+    var strings = {};
+    for (var key in content) {
+      if (content[key][language]) strings[key] = content[key][language];
+      else {
+        strings[key] = {};
+        for (var entry in content[key]) {
+          strings[key][entry] = content[key][entry][language];
+        }
+      }
+    }
     this.setState({
       language,
       strings
     });    
-  }
+  }  
   
   render() {
+    
+    let results = null;
+    if(this.state.results) {
+      results = <Results strings={this.state.strings.results} results={this.state.results}/>; 
+    }
+    
     return (
       <div>
         <LangSelect setLang={(language)=>this.setLang(language)}></LangSelect>
         <Form onClick={(data)=>this.handleSubmission(data)} submitButton={this.state.strings.submitButton}/>
-        <Results />
+        {results}
       </div>
     );
   }
@@ -61,8 +88,8 @@ class Form extends React.Component {
   constructor() {
     super();
     this.state={
-      start: 'newyork',
-      arrival:'montreal'
+      start: geotags.newyork ,
+      arrival: geotags.montreal
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -78,12 +105,12 @@ class Form extends React.Component {
     return (
       <div>
         <select onChange={this.handleChange} id='start' name='start' value={this.state.start}>
-        <option value='newyork'>New-york</option>
-        <option value='montreal'>Montréal</option>
+        <option value={geotags.newyork}>New-york</option>
+        <option value={geotags.montreal}>Montréal</option>
         </select>
         <select onChange={this.handleChange} id='arrival' name='arrival' value={this.state.arrival}>
-        <option value='newyork'>New-york</option>
-        <option value='montreal'>Montréal</option>
+        <option value={geotags.newyork}>New-york</option>
+        <option value={geotags.montreal}>Montréal</option>
         </select>
         <button onClick={()=>this.props.onClick(this.state)}>{this.props.submitButton}</button>
       </div>
@@ -110,12 +137,31 @@ class Results extends React.Component {
   }
   
   render() {
+    let results = this.props.results.map(function(result) {
+      return (
+        <tr key={result.key}>
+          <td>{result.departureLoc}</td>
+          <td>{result.departureTime}</td>
+          <td>{result.arrivalLoc}</td>
+          <td>{result.arrivalTime}</td>
+          <td>{result.price}</td>
+        </tr>
+      );
+    })
+    
     return (
       <table>
-        <tbody>
+        <thead>
           <tr>
-            <td>Here stands the results</td>
+            <th>{this.props.strings.departureLoc}</th>
+            <th>{this.props.strings.departureTime}</th>
+            <th>{this.props.strings.arrivalLoc}</th>
+            <th>{this.props.strings.arrivalTime}</th>
+            <th>{this.props.strings.price}</th>
           </tr>
+        </thead>
+        <tbody>
+            {results}
         </tbody>
       </table>
     );
