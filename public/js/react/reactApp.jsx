@@ -140,6 +140,8 @@ class Form extends React.Component {
         <option value={geotags.newyork}>New-york</option>
         <option value={geotags.montreal}>Montréal</option>
         </select>
+        <label htmlFor='date'>date: </label>
+        <input type='text' name='date' id='date' value={dateConvert.tomorrow()} readOnly></input>
         <button onClick={()=>this.props.onClick(this.state)}>{this.props.strings.submitButton}</button>
       </div>
       

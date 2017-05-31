@@ -35,8 +35,12 @@ section {
     justify-content: center;
     margin: auto;
     margin-top: 30px;
-    select, option, button, label {
+    select, option, button, label, input {
       margin: 5px;
+    }
+    #date {
+      background: lightgrey;
+      text-align: center;
     }
   }
   

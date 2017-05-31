@@ -14,4 +14,23 @@ function convert(rawDate, language) {
   }
 }
 
-module.exports = {convert};
+function tomorrow() {
+  var date= new Date();
+  console.log(date);
+  date.setDate(date.getDate() +1);
+  
+  console.log(date);
+  
+  var year = date.getFullYear();
+  var month = (date.getMonth() +1) + '';
+  var day = date.getDate() + ''; 
+  
+  console.log(year, month, day);
+  
+  if (month.length === 1) month = '0'+month; 
+  if (day.length === 1) day = '0'+day; 
+  
+  return (year+'-'+month+'-'+day);
+}
+
+module.exports = {convert, tomorrow};
