@@ -19,7 +19,7 @@ app.post('/query', function(req, res) {
   requester.formatedQuery({
     origin: req.body.start, 
     destination: req.body.arrival, 
-    date: '2017-06-01'
+    date: req.body.date
   }, function(result) {
     res.send(JSON.stringify(result));
   });

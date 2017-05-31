@@ -116,7 +116,8 @@ class Form extends React.Component {
     super();
     this.state={
       start: geotags.newyork ,
-      arrival: geotags.montreal
+      arrival: geotags.montreal,
+      date: dateConvert.tomorrow(),
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -141,7 +142,7 @@ class Form extends React.Component {
         <option value={geotags.montreal}>Montréal</option>
         </select>
         <label htmlFor='date'>date: </label>
-        <input type='text' name='date' id='date' value={dateConvert.tomorrow()} readOnly></input>
+        <input type='text' name='date' id='date' value={this.state.date} readOnly></input>
         <button onClick={()=>this.props.onClick(this.state)}>{this.props.strings.submitButton}</button>
       </div>
       
