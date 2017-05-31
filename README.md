@@ -1,3 +1,5 @@
+I completed this challenge as an exercise and to discover reactjs. You can find the result of this training [here on heroku](https://guarded-lake-63590.herokuapp.com/).
+
 # coding-challenge-frontend-b
 ![osheaga](https://cloud.githubusercontent.com/assets/1574577/12971188/13471bd0-d066-11e5-8729-f0ca5375752e.png)
 
