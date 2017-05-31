@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 
 var requester = require('./lib/requester.js');
 
-var port = process.env.port || 2000;
+var port = process.env.PORT || 2000;
 
 app.use(express.static('public'));
 
