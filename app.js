@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log(process.env.BUDBUS_TOKEN);
 
 const express = require('express');
 const app = express();
