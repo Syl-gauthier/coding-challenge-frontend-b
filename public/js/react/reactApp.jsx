@@ -11,6 +11,12 @@ var geotags = {
 var content = {
   title: {eng: 'OSHEAGA!!', fr:'OSHEAGA!!'},
   submitButton: {eng: 'Start my search', fr:'Commencer ma recherche'},
+  language: {eng: 'Language', fr:'Langue'},
+  form: {
+    submitButton: {eng: 'Start my search', fr:'Commencer ma recherche'},
+    from: {eng: 'from', fr:'depuis'},
+    to: {eng:'to', fr:'vers'}
+  },
   results:{
     departureLoc: {eng: 'from', fr: 'de'},
     departureTime: {eng: 'departur time', fr: 'heure de départ'},
@@ -71,13 +77,19 @@ class App extends React.Component {
     
     let results = null;
     if(this.state.results) {
-      results = <Results strings={this.state.strings.results} results={this.state.results}/>; 
+      results = (
+        <section className='results'>
+          <Results strings={this.state.strings.results} results={this.state.results}/>
+        </section>
+        ); 
     }
     
     return (
       <div>
-        <LangSelect setLang={(language)=>this.setLang(language)}></LangSelect>
-        <Form onClick={(data)=>this.handleSubmission(data)} submitButton={this.state.strings.submitButton}/>
+        <section className='input'>
+          <LangSelect setLang={(language)=>this.setLang(language)} languageString={this.state.strings.language}></LangSelect>
+          <Form onClick={(data)=>this.handleSubmission(data)} strings={this.state.strings.form}/>
+        </section>
         {results}
       </div>
     );
@@ -95,7 +107,6 @@ class Form extends React.Component {
   }
   
   handleChange(event) {
-    console.log(event.target.value);
     var newState = {};
     newState[event.target.id] = event.target.value;
     this.setState(newState);
@@ -103,16 +114,18 @@ class Form extends React.Component {
   
   render() {
     return (
-      <div>
+      <div className='form'>
+        <label htmlFor='start'>{this.props.strings.from}:</label>
         <select onChange={this.handleChange} id='start' name='start' value={this.state.start}>
         <option value={geotags.newyork}>New-york</option>
         <option value={geotags.montreal}>Montréal</option>
         </select>
+        <label htmlFor='arrival'>{this.props.strings.to}:</label>
         <select onChange={this.handleChange} id='arrival' name='arrival' value={this.state.arrival}>
         <option value={geotags.newyork}>New-york</option>
         <option value={geotags.montreal}>Montréal</option>
         </select>
-        <button onClick={()=>this.props.onClick(this.state)}>{this.props.submitButton}</button>
+        <button onClick={()=>this.props.onClick(this.state)}>{this.props.strings.submitButton}</button>
       </div>
       
     );
@@ -124,6 +137,7 @@ class LangSelect extends React.Component {
   render() {
     return(
       <div className='lang-select'>
+        <span>{this.props.languageString}: </span>
         <button onClick ={()=>this.props.setLang('fr')}>Fr</button>
         <button onClick ={()=>this.props.setLang('eng')}>Eng</button>
       </div>

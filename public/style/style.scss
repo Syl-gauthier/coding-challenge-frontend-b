@@ -7,7 +7,8 @@ body {
 }
 
 #root {
-  margin: 10px;
+  width: 90%;
+  margin: auto;
   background: lightgrey;
   flex: 1;
 }
@@ -16,3 +17,32 @@ header, footer {
   text-align: center;
   margin: 5px;
 }
+
+section {
+  margin: auto;
+  margin-top: 20px;
+  width: 95%;
+  min-height: 100px;
+  background: white;
+  padding: 10px;
+  box-shadow: 5px 5px 2px grey;
+  border-radius: 5px;
+  .lang-select {
+    position: absolute;
+  }
+  .form{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-top: 30px;
+    select, option, button, label {
+      margin: 5px;
+    }
+  }
+  
+}
+
+#root>div{
+  margin: auto;
+}
+
